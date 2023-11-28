@@ -1,5 +1,6 @@
 import socket
 import jwt
+import json
 
 SECRET_KEY = 'ab'
 
@@ -30,19 +31,29 @@ def start_server():
 
         print(f"Connection from {addr}")
 
+        #accept request from client
         data = conn.recv(1024)
+
+        # if no request is sent by the client break from the code
         if not data:
             break
 
+        #used to convert a sequence of bytes into a Unicode string
         token = data.decode()
+
+        #decode the data from client using jwr
         decoded_data = decode_jwt(token)
 
         if decoded_data:
             user_id = decoded_data['user_id']
             print("Received request: ", decoded_data["action"])
-            if user_id == "123":
+            if user_id == 523:
+                #convert data to json and change into bytes form
+                response = "Accepted request"
+                print(response)
                 response_data = json.dumps(response).encode()
                 conn.sendall(response_data)
+                print("Response Data: ", response_data)
         else:
             response = {"Verification incomplete"}
 

@@ -5,6 +5,7 @@ import jwt
 SECRET_KEY = 'ab'
 
 def generate_token(data):
+    #generate a jason web token to enable the server to authenticate the user
     return jwt.encode(data, SECRET_KEY, algorithm='HS256')
 
 def start_client():
@@ -20,7 +21,9 @@ def start_client():
 
     # Receive response from server
     response_data = client_socket.recv(1024)
+    print("Response Data", response_data)
     decoded_response = response_data.decode()
+    print("Response from the server: ", decoded_response)
 
     client_socket.close()
 
