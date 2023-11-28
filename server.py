@@ -3,7 +3,9 @@ import jwt
 
 SECRET_KEY = 'ab'
 
-#decoding the token back to data
+# Define allowed IP addresses
+allowed_ips = ['192.168.1.10', '192.168.1.20', '127.0.0.1']
+
 def decode_jwt(token):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
@@ -19,6 +21,13 @@ def start_server():
 
     while True:
         conn, addr = server_socket.accept()
+
+        # Check if the source IP address is allowed
+        if addr[0] not in allowed_ips:
+            print(f"Unauthorized connection from {addr[0]}")
+            conn.close()
+            continue
+
         print(f"Connection from {addr}")
 
         data = conn.recv(1024)
